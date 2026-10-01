@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://example.com",
+    "paths": "/home"
+  },
+  {
+    "url": "https://api.example.com",
+    "paths": ["/health", "/status"]
+  }
+]

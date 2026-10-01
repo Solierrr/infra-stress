@@ -3,6 +3,14 @@
 .env.*
 !.env.example
 
+# node / k6 build
+node_modules/
+dist/
+
+# real target list (contains the domains/paths being attacked) — keep only the example tracked
+src/urls.json
+!src/urls.example.json
+
 # VS Code
 .vscode/
 !.vscode/settings.json
