@@ -12,6 +12,8 @@ export default tseslint.config(
         open: 'readonly',
         __ITER: 'readonly',
         __VU: 'readonly',
+        __ENV: 'readonly',
+        console: 'readonly',
       },
     },
     rules: {

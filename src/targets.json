@@ -1,0 +1,11 @@
+{
+  "web-worker": {
+    "local": "http://127.0.0.1:8787",
+    "prod": "https://solarianetwork.site"
+  },
+  "web-app": {
+    "local": "http://localhost:5173",
+    "qa": "https://web-app-ldi0.onrender.com",
+    "prod": "https://solarianetwork.site"
+  }
+}
