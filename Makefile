@@ -11,7 +11,7 @@ TEST_CMD      ?=
 LINT_CMD      ?= npm run lint && npm run typecheck
 FORMAT_CMD    ?=
 CLEAN_PATHS   ?= dist
-DOCTOR_TOOLS  ?= git node npm
+DOCTOR_TOOLS  ?= git node npm k6
 
 # ---- padrao (nao editar por repositorio) ----
 INFISICAL_PROJECT_ID ?= 2296d19c-5f3b-41e1-afa3-fcde39966a71
@@ -88,3 +88,18 @@ doctor: ## Check that the tools this repository needs are available
 	exit $$missing
 
 ci: lint test build ## Run lint, test and build in pipeline order
+
+# ---- alvos proprios deste repositorio ----
+# k6 roda os testes ja compilados em dist/. TARGET escolhe o alvo, ENV (local|qa|prod) o ambiente;
+# prod exige CONFIRM_PROD=yes. Para usar o k6 do Docker: make smoke K6="docker run --rm -i -v $(CURDIR)/dist:/dist grafana/k6" K6_SCRIPTS=/dist
+TARGET        ?= web-app
+K6            ?= k6
+K6_SCRIPTS    ?= dist
+K6_FLAGS      ?= -e TARGET=$(TARGET) -e ENV=$(ENV) $(if $(BASE_URL),-e BASE_URL=$(BASE_URL)) $(if $(PEAK_VUS),-e PEAK_VUS=$(PEAK_VUS)) $(if $(CONFIRM_PROD),-e CONFIRM_PROD=$(CONFIRM_PROD)) $(if $(HONEYPOT),-e HONEYPOT=$(HONEYPOT)) $(if $(ALLOW_BAN),-e ALLOW_BAN=$(ALLOW_BAN))
+.PHONY: smoke stress
+
+smoke: build ## Smoke test: TARGET=web-app|web-worker ENV=local|qa|prod
+	set -e; $(K6) run $(K6_FLAGS) $(K6_SCRIPTS)/smoke/$(TARGET).js
+
+stress: build ## Stress test: TARGET=web-app|web-worker ENV=local|qa|prod PEAK_VUS=N
+	set -e; $(K6) run $(K6_FLAGS) $(K6_SCRIPTS)/stress/$(TARGET).js
