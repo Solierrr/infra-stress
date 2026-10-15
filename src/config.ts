@@ -27,6 +27,12 @@ const DEFAULT_PEAK_VUS: Record<Environment, number> = { local: 50, qa: 20, prod:
 
 type TargetMap = Record<string, Partial<Record<Environment, string>>>;
 
+function stripTrailingSlashes(url: string): string {
+  let end = url.length;
+  while (end > 0 && url[end - 1] === '/') end--;
+  return url.slice(0, end);
+}
+
 export function resolveProfile(): Profile {
   const map = targets as TargetMap;
   const target = __ENV.TARGET ?? '';
@@ -39,7 +45,7 @@ export function resolveProfile(): Profile {
     throw new Error(`ENV must be one of: ${ENVIRONMENTS.join(', ')} (got "${env}")`);
   }
 
-  const baseUrl = (__ENV.BASE_URL ?? map[target][env] ?? '').replace(/\/+$/, '');
+  const baseUrl = stripTrailingSlashes(__ENV.BASE_URL ?? map[target][env] ?? '');
   if (!baseUrl) {
     throw new Error(`${target} has no "${env}" environment in targets.json; set BASE_URL to override`);
   }
