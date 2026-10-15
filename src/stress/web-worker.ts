@@ -18,6 +18,6 @@ export const options: Options = {
 
 export default function stress(): void {
   allowMaintenancePage();
-  edgeRequest(profile.baseUrl, PATHS[Math.floor(Math.random() * PATHS.length)]);
-  sleep(Math.random());
+  edgeRequest(profile.baseUrl, PATHS[(__VU + __ITER) % PATHS.length]);
+  sleep((__ITER % 5) / 5);
 }

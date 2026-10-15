@@ -21,5 +21,5 @@ export function setup() {
 
 export default function stress(data: ReturnType<typeof setup>): void {
   pageLoad(profile.baseUrl, data, pickPage());
-  sleep(Math.random() * 2);
+  sleep(1 + (__ITER % 3) / 2);
 }

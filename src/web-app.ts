@@ -63,5 +63,5 @@ export function pageLoad(baseUrl: string, data: AppData, path: string): void {
 }
 
 export function pickPage(): string {
-  return PAGES[Math.floor(Math.random() * PAGES.length)];
+  return PAGES[(__VU * 7 + __ITER) % PAGES.length];
 }
